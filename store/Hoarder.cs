@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace store
@@ -11,8 +12,9 @@ namespace store
             Days = 7;
         }
 
-        protected override void UpdateAmountAndDays()
+        public override bool CanRent(int inventory)
         {
+            return RentedCount == 0 && inventory >= 3;
         }
     }
 }

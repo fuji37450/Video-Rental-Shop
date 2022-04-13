@@ -7,40 +7,37 @@ namespace store
     public abstract class Customer
     {
         public string Name { get; set; }
+        public int RentedCount { get; set; } = 0;
+        protected const int MaximumRent = 3;
         protected int Amount { get; set; }
         protected int Days { get; set; }
-        protected List<Video> Picked { get; set; }
+        protected List<Video> PickedVideo { get; set; }
 
         public Customer(string name) => Name = name;
 
-        public void Rent(ref Store store)
+        public virtual bool CanRent(int inventory)
         {
-            UpdateAmountAndDays();
-
-            Picked = PickVideos(ref store);
-
-            if (Picked?.Any() == true)
-            {
-                store.CreateRental(this, Picked, Days);
-            }
+            return RentedCount < MaximumRent;
         }
 
-        public List<Video> PickVideos(ref Store store)
+        public void Rent(ref Store store)
         {
-            List<Video> avaliable = store.AvailableVideos;
+            RandomAmountAndDays(store.AvailableVideos.Count);
 
-            if (avaliable.Count < Amount)
-            {
-                return null;
-            }
+            PickedVideo = PickVideos(store.AvailableVideos);
+            RentedCount += Amount;
 
-            HashSet<int> pickedNum = Utilites.GenerateDistinctNumbers(0, avaliable.Count - 1, Amount);
-            List<Video> picked = (from num in pickedNum
-                                  select avaliable[num])
-                                 .ToList();
+            store.CreateRental(this, PickedVideo, Days);
+        }
+
+        public List<Video> PickVideos(List<Video> availableVideos)
+        {
+            List<int> pickedNum = Utilites.GenerateDistinctNumbers(0, availableVideos.Count - 1, Amount);
+            List<Video> picked = availableVideos.Where((video, index) => pickedNum.Contains(index))
+                                                .ToList();
             return picked;
         }
 
-        protected abstract void UpdateAmountAndDays();
+        protected virtual void RandomAmountAndDays(int inventory) { }
     }
 }

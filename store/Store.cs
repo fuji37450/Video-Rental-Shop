@@ -8,9 +8,9 @@ namespace store
     {
         public List<Video> AvailableVideos { get; internal set; }
         public List<Rental> RentalHistory { get; set; }
+        public List<Rental> ActiveRental { get; set; }
         private List<string> VideoCategories { get; set; }
         private List<Video> Videos { get; set; }
-        private List<Rental> ActiveRental { get; set; }
         private Dictionary<string, int> Price { get; set; }
 
         public Store()
@@ -25,7 +25,7 @@ namespace store
 
         public void CreateRental(Customer customer, List<Video> videos, int days)
         {
-            int pricePerDay = videos.Aggregate(0, (result, item) => result + Price[item.Category]);
+            int pricePerDay = videos.Aggregate(0, (result, video) => result + Price[video.Category]);
             Rental rental = new Rental(days, pricePerDay, customer, videos);
             ActiveRental.Add(rental);
             RentalHistory.Add(rental);
@@ -35,13 +35,15 @@ namespace store
         public void ReturnVideo(Rental rental)
         {
             _ = ActiveRental.Remove(rental);
+            rental.Renter.RentedCount -= rental.Rents.Count;
             AvailableVideos.AddRange(rental.Rents);
         }
 
         private void SetPrice()
         {
-            HashSet<int> prices = Utilites.GenerateDistinctNumbers(1, 10, VideoCategories.Count);
-            Price = VideoCategories.Zip(prices, (k, v) => (k, v)).ToDictionary(x => x.k, x => x.v);
+            List<int> prices = Utilites.GenerateDistinctNumbers(1, 10, VideoCategories.Count);
+            Price = VideoCategories.Zip(prices, (k, v) => (k, v))
+                                   .ToDictionary(x => x.k, x => x.v);
         }
 
         private void SetVideos()

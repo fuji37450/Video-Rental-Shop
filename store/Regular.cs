@@ -8,9 +8,9 @@ namespace store
     {
         public Regular(string name) : base(name){}
 
-        protected override void UpdateAmountAndDays()
+        protected override void RandomAmountAndDays(int inventory)
         {
-            Amount = Utilites.GenerateNumber(1, 3);
+            Amount = Utilites.GenerateNumber(1, Math.Min(3, inventory));
             Days = Utilites.GenerateNumber(3, 5);
         }
     }

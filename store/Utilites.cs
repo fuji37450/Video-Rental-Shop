@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace store
 {
@@ -9,7 +10,7 @@ namespace store
 
         public static int GenerateNumber(int min, int max) => Randomizer.Next(min, max + 1);
 
-        public static HashSet<int> GenerateDistinctNumbers(int min, int max, int amount)
+        public static List<int> GenerateDistinctNumbers(int min, int max, int amount)
         {
             HashSet<int> numbers = new HashSet<int>();
 
@@ -18,7 +19,7 @@ namespace store
                 _ = numbers.Add(Randomizer.Next(min, max + 1));
             }
 
-            return numbers;
+            return numbers.ToList();
         }
     }
 }

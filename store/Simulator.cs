@@ -21,42 +21,35 @@ namespace store
             }
         }
 
-        private void Init()
-        {
-
-        }
-
         private static void DaySimulate()
         {
             CheckRental();
             List<Customer> customers = ChooseCustomer();
-            if(_store.AvailableVideos.Count > 0)
+
+            if (_store.AvailableVideos.Count > 0)
             {
                 foreach (Customer customer in customers)
                 {
-                    customer.Rent(ref _store);
+                    if (customer.CanRent(_store.AvailableVideos.Count))
+                    {
+                        customer.Rent(ref _store);
+                    }
                 }
             }
         }
 
         private static void CheckRental()
         {
-            //TODO: sort
-            foreach (Rental rental in _store.RentalHistory)
-            {
-                if (rental.EndDate == Today)
-                {
-                    _store.ReturnVideo(rental);
-                }
-            }
+            _store.ActiveRental.Where(rental => rental.EndDate == Today)
+                               .ToList()
+                               .ForEach(_store.ReturnVideo);
         }
 
         private static List<Customer> ChooseCustomer()
         {
-            HashSet<int> pickedNum = Utilites.GenerateDistinctNumbers(0, 9, 3);
-            List<Customer> picked = (from num in pickedNum
-                                  select Customers[num])
-                                 .ToList();
+            List<int> pickedNum = Utilites.GenerateDistinctNumbers(0, 9, 3);
+            List<Customer> picked = Customers.Where((customer, index) => pickedNum.Contains(index))
+                                             .ToList();
             return picked;
         }
 
