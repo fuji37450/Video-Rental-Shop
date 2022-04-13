@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+
 namespace store
 {
     public class Hoarder:Customer
@@ -13,7 +15,10 @@ namespace store
         {
             Picked = PickVideos(ref store);
 
-            store.CreateRental(this, Picked, Days);
+            if (Picked?.Any() == true)
+            {
+                store.CreateRental(this, Picked, Days);
+            }
         }
     }
 }

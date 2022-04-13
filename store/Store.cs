@@ -8,30 +8,33 @@ namespace store
     {
         private List<string> VideoCategories { get; set; }
         private List<Video> Videos { get; set; }
-        private List<Rental> RentalHistory { get; set; }
+        public List<Rental> RentalHistory { get; set; }
+        private List<Rental> ActiveRental { get; set; }
         private Dictionary<string, int> Price { get; set; }
-        private Dictionary<Customer, List<Rental>> ActiveRental { get; set; }
         public List<Video> AvailableVideos { get; internal set; }
 
         public Store()
         {
             VideoCategories = new List<string> { "NewRelease", "Drama", "Comedy", "Romance", "Horror" };
+            RentalHistory = new List<Rental>();
+            ActiveRental = new List<Rental>();
             SetPrice();
             SetVideos();
+            AvailableVideos = Videos;
         }
 
         public void CreateRental(Customer customer, List<Video> videos, int days)
         {
             int pricePerDay = videos.Aggregate(0, (result, item) => result + Price[item.Category]);
-            Rental rental = new Rental(1, days, pricePerDay, customer, videos);  //TODO: startDate
-            ActiveRental[customer].Add(rental);
+            Rental rental = new Rental(Simulator.Today, days, pricePerDay, customer, videos);  //TODO: startDate
+            ActiveRental.Add(rental);
             RentalHistory.Add(rental);
             AvailableVideos = AvailableVideos.Except(videos).ToList();
         }
 
         public void ReturnVideo(Rental rental)
         {
-            _ = ActiveRental[rental.Renter].Remove(rental);
+            _ = ActiveRental.Remove(rental);
             AvailableVideos.AddRange(rental.Rents);
         }
 
@@ -43,6 +46,7 @@ namespace store
 
         private void SetVideos()
         {
+            Videos = new List<Video>();
             foreach (string category in VideoCategories)
             {
                 for (char letter = 'A'; letter <= 'D'; letter++)

@@ -14,7 +14,10 @@ namespace store
             Days = Utilites.GenerateNumber(3, 5);
             Picked = PickVideos(ref store);
 
-            store.CreateRental(this, Picked, Days);
+            if (Picked?.Any() == true)
+            {
+                store.CreateRental(this, Picked, Days);
+            }
         }
     }
 }

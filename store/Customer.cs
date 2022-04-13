@@ -9,7 +9,7 @@ namespace store
         protected int Amount { get; set; }
         protected int Days { get; set; }
         protected List<Video> Picked { get; set; }
-        private string Name { get; set; }
+        public string Name { get; set; }
 
         public Customer(string name) => Name = name;
 
@@ -18,7 +18,13 @@ namespace store
         public List<Video> PickVideos(ref Store store)
         {
             List<Video> avaliable = store.AvailableVideos;
-            HashSet<int> pickedNum = Utilites.GenerateDistinctNumbers(0, avaliable.Count, Amount);
+
+            if (avaliable.Count < Amount)
+            {
+                return null;
+            }
+
+            HashSet<int> pickedNum = Utilites.GenerateDistinctNumbers(0, avaliable.Count - 1, Amount);
             List<Video> picked = (from num in pickedNum
                                   select avaliable[num])
                                  .ToList();

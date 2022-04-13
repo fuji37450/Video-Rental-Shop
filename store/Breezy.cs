@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+
 namespace store
 {
     public class Breezy : Customer
@@ -11,7 +13,10 @@ namespace store
             Days = Utilites.GenerateNumber(1, 2);
             Picked = PickVideos(ref store);
 
-            store.CreateRental(this, Picked, Days);
+            if (Picked?.Any() == true)
+            {
+                store.CreateRental(this, Picked, Days);
+            }
         }
     }
 }
