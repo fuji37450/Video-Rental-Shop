@@ -6,12 +6,12 @@ namespace store
 {
     public class Store
     {
+        public List<Video> AvailableVideos { get; internal set; }
+        public List<Rental> RentalHistory { get; set; }
         private List<string> VideoCategories { get; set; }
         private List<Video> Videos { get; set; }
-        public List<Rental> RentalHistory { get; set; }
         private List<Rental> ActiveRental { get; set; }
         private Dictionary<string, int> Price { get; set; }
-        public List<Video> AvailableVideos { get; internal set; }
 
         public Store()
         {
@@ -26,7 +26,7 @@ namespace store
         public void CreateRental(Customer customer, List<Video> videos, int days)
         {
             int pricePerDay = videos.Aggregate(0, (result, item) => result + Price[item.Category]);
-            Rental rental = new Rental(Simulator.Today, days, pricePerDay, customer, videos);  //TODO: startDate
+            Rental rental = new Rental(days, pricePerDay, customer, videos);
             ActiveRental.Add(rental);
             RentalHistory.Add(rental);
             AvailableVideos = AvailableVideos.Except(videos).ToList();

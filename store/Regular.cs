@@ -8,16 +8,10 @@ namespace store
     {
         public Regular(string name) : base(name){}
 
-        public override void Rent(ref Store store)
+        protected override void UpdateAmountAndDays()
         {
             Amount = Utilites.GenerateNumber(1, 3);
             Days = Utilites.GenerateNumber(3, 5);
-            Picked = PickVideos(ref store);
-
-            if (Picked?.Any() == true)
-            {
-                store.CreateRental(this, Picked, Days);
-            }
         }
     }
 }

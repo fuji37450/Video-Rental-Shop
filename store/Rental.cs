@@ -11,9 +11,9 @@ namespace store
         public Customer Renter { get; set; }
         public List<Video> Rents { get; set; }
 
-        public Rental(int start, int days, int pricePerDay, Customer customer, List<Video> videos)
+        public Rental(int days, int pricePerDay, Customer customer, List<Video> videos)
         {
-            StartDate = start;
+            StartDate = Simulator.Today;
             EndDate = StartDate + days;
             TotalPrice = pricePerDay * days;
             Renter = customer;

@@ -17,7 +17,6 @@ namespace store
 
             for (Today = 1; Today <= 35; Today++)
             {
-                Console.WriteLine($"Day {Today}");
                 DaySimulate();
             }
         }

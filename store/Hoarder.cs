@@ -11,14 +11,8 @@ namespace store
             Days = 7;
         }
 
-        public override void Rent(ref Store store)
+        protected override void UpdateAmountAndDays()
         {
-            Picked = PickVideos(ref store);
-
-            if (Picked?.Any() == true)
-            {
-                store.CreateRental(this, Picked, Days);
-            }
         }
     }
 }

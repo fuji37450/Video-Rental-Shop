@@ -6,14 +6,24 @@ namespace store
 {
     public abstract class Customer
     {
+        public string Name { get; set; }
         protected int Amount { get; set; }
         protected int Days { get; set; }
         protected List<Video> Picked { get; set; }
-        public string Name { get; set; }
 
         public Customer(string name) => Name = name;
 
-        public abstract void Rent(ref Store store);
+        public void Rent(ref Store store)
+        {
+            UpdateAmountAndDays();
+
+            Picked = PickVideos(ref store);
+
+            if (Picked?.Any() == true)
+            {
+                store.CreateRental(this, Picked, Days);
+            }
+        }
 
         public List<Video> PickVideos(ref Store store)
         {
@@ -30,5 +40,7 @@ namespace store
                                  .ToList();
             return picked;
         }
+
+        protected abstract void UpdateAmountAndDays();
     }
 }
