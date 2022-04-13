@@ -19,6 +19,8 @@ namespace store
             {
                 DaySimulate();
             }
+
+            Report();
         }
 
         private static void DaySimulate()
@@ -70,6 +72,42 @@ namespace store
             {
                 Customers.Add(new Regular("Regular" + i.ToString()));
             }
+        }
+
+        private static void Report()
+        {
+            Console.WriteLine("Videos currently in the store:");
+            ReportVideos(_store.AvailableVideos);
+            Console.Write("The amount of money the store made during the 35 days: $");
+            Console.WriteLine($"{_store.RentalHistory.Aggregate(0, (result, rental) => result + rental.TotalPrice)}");
+            Console.WriteLine("Complete rentals:");
+            ReportRentals(_store.RentalHistory.Except(_store.ActiveRental).ToList());
+            Console.WriteLine("Active rentals:");
+            ReportRentals(_store.ActiveRental);
+        }
+
+        private static void ReportRentals(List<Rental> rentals)
+        {
+            Console.WriteLine("{0,5}  {1,-8}  {2,4}  {3,10}  {4}", "No.", "Renter", "Days", "TotalPrice", "Movies");
+            for (int i = 0; i < rentals.Count; i++)
+            {
+                Rental rental = rentals[i];
+                Console.Write("{0,5}| {1,-8}| {2,4}| {3,10}| ", i + ".", rental.Renter.Name, rental.EndDate - rental.StartDate, rental.TotalPrice);
+                ReportVideos(rental.Rents);
+            }
+        }
+
+        private static void ReportVideos(List<Video> videos)
+        {
+            for (int i = 0; i < videos.Count; i++)
+            {
+                Console.Write($"{videos[i].Name}");
+                if (i != videos.Count - 1)
+                {
+                    Console.Write(", ");
+                }
+            }
+            Console.WriteLine();
         }
     }
 }
