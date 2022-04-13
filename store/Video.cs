@@ -6,8 +6,10 @@ namespace store
         public string Name { get; set; }
         public string Category { get; set; }
 
-        public Video()
+        public Video(string name, string category)
         {
+            Name = name;
+            Category = category;
         }
     }
 }
