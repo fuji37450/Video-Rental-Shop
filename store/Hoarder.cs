@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace store
+﻿namespace store
 {
-    public class Hoarder:Customer
+    public class Hoarder : Customer
     {
         public Hoarder(string name) : base(name)
         {

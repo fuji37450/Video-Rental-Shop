@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace store
 {
     public class Breezy : Customer
     {
-        public Breezy(string name) : base(name){}
+        public Breezy(string name) : base(name) { }
 
         protected override void RandomAmountAndDays(int inventory)
         {

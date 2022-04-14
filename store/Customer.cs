@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace store
 {
     public abstract class Customer
     {
-        public string Name { get; set; }
-        public int RentedCount { get; set; } = 0;
+        public string Name { get; private set; }
+        public int RentedCount { get; set; }
         protected const int MaximumRent = 3;
         protected int Amount { get; set; }
         protected int Days { get; set; }

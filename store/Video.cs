@@ -1,10 +1,9 @@
-﻿using System;
-namespace store
+﻿namespace store
 {
     public class Video
     {
-        public string Name { get; set; }
-        public string Category { get; set; }
+        public string Name { get; private set; }
+        public string Category { get; private set; }
 
         public Video(string name, string category)
         {

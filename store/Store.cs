@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace store
 {
     public class Store
     {
-        public List<Video> AvailableVideos { get; internal set; }
-        public List<Rental> RentalHistory { get; set; }
-        public List<Rental> ActiveRental { get; set; }
+        public List<Video> AvailableVideos { get; private set; }
+        public List<Rental> RentalHistory { get; private set; }
+        public List<Rental> ActiveRental { get; private set; }
         private List<string> VideoCategories { get; set; }
         private List<Video> Videos { get; set; }
         private Dictionary<string, int> Price { get; set; }
@@ -26,7 +25,7 @@ namespace store
         public void CreateRental(Customer customer, List<Video> videos, int days)
         {
             int pricePerDay = videos.Aggregate(0, (result, video) => result + Price[video.Category]);
-            Rental rental = new Rental(days, pricePerDay, customer, videos);
+            Rental rental = new(days, pricePerDay, customer, videos);
             ActiveRental.Add(rental);
             RentalHistory.Add(rental);
             AvailableVideos = AvailableVideos.Except(videos).ToList();
