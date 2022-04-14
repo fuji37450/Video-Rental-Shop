@@ -28,14 +28,11 @@ namespace store
             CheckRental();
             List<Customer> customers = ChooseCustomer();
 
-            if (_store.AvailableVideos.Count > 0)
+            foreach (Customer customer in customers)
             {
-                foreach (Customer customer in customers)
+                if (customer.CanRent(_store.AvailableVideos.Count))
                 {
-                    if (customer.CanRent(_store.AvailableVideos.Count))
-                    {
-                        customer.Rent(ref _store);
-                    }
+                    customer.Rent(ref _store);
                 }
             }
         }
@@ -88,11 +85,11 @@ namespace store
 
         private static void ReportRentals(List<Rental> rentals)
         {
-            Console.WriteLine("{0,5}  {1,-8}  {2,4}  {3,10}  {4}", "No.", "Renter", "Days", "TotalPrice", "Movies");
+            Console.WriteLine("{0,5}  {1,-8}  {2,8}  {3,4}  {4,10}  {4}", "No.", "Renter", "StartDay", "Days", "TotalPrice", "Movies");
             for (int i = 0; i < rentals.Count; i++)
             {
                 Rental rental = rentals[i];
-                Console.Write("{0,5}| {1,-8}| {2,4}| {3,10}| ", i + ".", rental.Renter.Name, rental.EndDate - rental.StartDate, rental.TotalPrice);
+                Console.Write("{0,5}| {1,-8}| {2,8}| {3,4}| {4,10}| ", i + ".", rental.Renter.Name, rental.StartDate, rental.EndDate - rental.StartDate, rental.TotalPrice);
                 ReportVideos(rental.Rents);
             }
         }

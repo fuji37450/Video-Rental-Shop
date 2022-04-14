@@ -17,7 +17,7 @@ namespace store
 
         public virtual bool CanRent(int inventory)
         {
-            return RentedCount < MaximumRent;
+            return RentedCount < MaximumRent && inventory > 0;
         }
 
         public void Rent(ref Store store)
