@@ -4,13 +4,35 @@ using System.Linq;
 
 namespace store
 {
-    class Simulator
+    class Program
     {
-        public static int Today { get; private set; }
-        private static Store _store;
-        private static List<Customer> Customers { get; set; }
+        static void Main()
+        {
+            Simulator simulator = Simulator.GetInstance();
+            simulator.Run();
+        }
 
-        private static void Main()
+    }
+
+    public sealed class Simulator
+    {
+        private static Simulator _instance;
+        public static int Today { get; private set; }
+        private Store _store;
+        private List<Customer> Customers { get; set; }
+
+        private Simulator() { }
+
+        public static Simulator GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new Simulator();
+            }
+            return _instance;
+        }
+
+        public void Run()
         {
             _store = new Store();
             SetCustomers();
@@ -23,7 +45,7 @@ namespace store
             Report();
         }
 
-        private static void DaySimulate()
+        private void DaySimulate()
         {
             CheckRental();
             List<Customer> customers = ChooseCustomer();
@@ -37,14 +59,14 @@ namespace store
             }
         }
 
-        private static void CheckRental()
+        private void CheckRental()
         {
             _store.ActiveRental.Where(rental => rental.EndDate == Today)
                                .ToList()
                                .ForEach(_store.ReturnVideo);
         }
 
-        private static List<Customer> ChooseCustomer()
+        private List<Customer> ChooseCustomer()
         {
             List<int> pickedNum = Utilites.GenerateDistinctNumbers(0, 9, 3);
             List<Customer> picked = Customers.Where((customer, index) => pickedNum.Contains(index))
@@ -52,7 +74,7 @@ namespace store
             return picked;
         }
 
-        private static void SetCustomers()
+        private void SetCustomers()
         {
             Customers = new List<Customer>();
             for (int i = 1; i <= 3; i++)
@@ -71,7 +93,7 @@ namespace store
             }
         }
 
-        private static void Report()
+        private void Report()
         {
             Console.WriteLine("Videos currently in the store:");
             ReportVideos(_store.AvailableVideos);
@@ -83,7 +105,7 @@ namespace store
             ReportRentals(_store.ActiveRental);
         }
 
-        private static void ReportRentals(List<Rental> rentals)
+        private void ReportRentals(List<Rental> rentals)
         {
             Console.WriteLine("{0,5}  {1,-8}  {2,8}  {3,4}  {4,10}  {4}",
                               "No.",
@@ -105,7 +127,7 @@ namespace store
             }
         }
 
-        private static void ReportVideos(List<Video> videos)
+        private void ReportVideos(List<Video> videos)
         {
             if (videos.Count == 0)
             {

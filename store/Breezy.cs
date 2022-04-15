@@ -8,7 +8,7 @@ namespace store
 
         protected override void RandomAmountAndDays(int inventory)
         {
-            Amount = Utilites.GenerateNumber(1, Math.Min(3 - RentedCount, inventory));
+            Amount = Utilites.GenerateNumber(1, Math.Min(2 - RentedCount, inventory));
             Days = Utilites.GenerateNumber(1, 2);
         }
     }
